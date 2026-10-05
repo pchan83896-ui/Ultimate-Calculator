@@ -15,28 +15,25 @@ class _CalculatorPageState extends State<CalculatorPage> {
   @override
   void initState() {
     super.initState();
-
     _controller = CalculatorController();
-    _controller.addListener(_onControllerChanged);
   }
 
   @override
   void dispose() {
-    _controller
-      ..removeListener(_onControllerChanged)
-      ..dispose();
-
+    _controller.dispose();
     super.dispose();
   }
 
-  void _onControllerChanged() {
-    if (mounted) {
-      setState(() {});
-    }
+  void _input(String value) {
+    setState(() {
+      _controller.input(value);
+    });
   }
 
-  void _input(String value) {
-    _controller.input(value);
+  void _calculate() {
+    setState(() {
+      _controller.calculate();
+    });
   }
 
   @override
@@ -46,9 +43,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
         title: const Text('Ultimate Calculator'),
         actions: [
           IconButton(
-            tooltip: 'Scientific calculator',
             onPressed: () {},
             icon: const Icon(Icons.science_outlined),
+            tooltip: 'Scientific Calculator',
           ),
         ],
       ),
@@ -56,55 +53,50 @@ class _CalculatorPageState extends State<CalculatorPage> {
         child: Column(
           children: [
             Expanded(
-              child: _buildDisplay(context),
+              flex: 2,
+              child: _buildDisplay(),
             ),
-            _buildKeypad(context),
+            Expanded(
+              flex: 5,
+              child: _buildKeypad(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDisplay(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(20),
+  Widget _buildDisplay() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+      alignment: Alignment.bottomRight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (_controller.expression.isNotEmpty)
             Text(
               _controller.expression,
-              textAlign: TextAlign.right,
+              style: Theme.of(context).textTheme.titleMedium,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
             ),
           const SizedBox(height: 8),
           Text(
-            _controller.hasError
-                ? 'Error'
-                : _controller.display,
-            textAlign: TextAlign.right,
+            _controller.display,
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.displayMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
           ),
-          if (_controller.hasError) ...[
-            const SizedBox(height: 4),
+          if (_controller.error != null) ...[
+            const SizedBox(height: 8),
             Text(
-              _controller.error ?? 'Calculation error',
-              textAlign: TextAlign.right,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              _controller.error!,
               style: TextStyle(
-                color: theme.colorScheme.error,
+                color: Theme.of(context).colorScheme.error,
               ),
             ),
           ],
@@ -113,130 +105,95 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
-  Widget _buildKeypad(BuildContext context) {
+  Widget _buildKeypad() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+      padding: const EdgeInsets.all(12),
       child: Column(
         children: [
-          _buildRow([
-            _key(
-              'AC',
-              onPressed: _controller.clear,
-              type: _KeyType.action,
+          Expanded(
+            child: Row(
+              children: [
+                _key('±', onPressed: () => _input('±')),
+                _key('(', onPressed: () => _input('(')),
+                _key(')', onPressed: () => _input(')')),
+                _key('√', onPressed: () => _input('sqrt(')),
+              ],
             ),
-            _key(
-              '⌫',
-              onPressed: _controller.backspace,
-              type: _KeyType.action,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key('AC', onPressed: _controller.clear),
+                _key('⌫', onPressed: _controller.backspace),
+                _key('%', onPressed: () => _input('%')),
+                _key('÷', onPressed: () => _input('/')),
+              ],
             ),
-            _key(
-              '%',
-              onPressed: () => _input('%'),
-              type: _KeyType.operator,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key('7', onPressed: () => _input('7')),
+                _key('8', onPressed: () => _input('8')),
+                _key('9', onPressed: () => _input('9')),
+                _key('×', onPressed: () => _input('*')),
+              ],
             ),
-            _key(
-              '÷',
-              onPressed: () => _input('/'),
-              type: _KeyType.operator,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key('4', onPressed: () => _input('4')),
+                _key('5', onPressed: () => _input('5')),
+                _key('6', onPressed: () => _input('6')),
+                _key('−', onPressed: () => _input('-')),
+              ],
             ),
-          ]),
-          _buildRow([
-            _key('7', onPressed: () => _input('7')),
-            _key('8', onPressed: () => _input('8')),
-            _key('9', onPressed: () => _input('9')),
-            _key(
-              '×',
-              onPressed: () => _input('*'),
-              type: _KeyType.operator,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key('1', onPressed: () => _input('1')),
+                _key('2', onPressed: () => _input('2')),
+                _key('3', onPressed: () => _input('3')),
+                _key('+', onPressed: () => _input('+')),
+              ],
             ),
-          ]),
-          _buildRow([
-            _key('4', onPressed: () => _input('4')),
-            _key('5', onPressed: () => _input('5')),
-            _key('6', onPressed: () => _input('6')),
-            _key(
-              '−',
-              onPressed: () => _input('-'),
-              type: _KeyType.operator,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key(
+                  '0',
+                  flex: 2,
+                  onPressed: () => _input('0'),
+                ),
+                _key('.', onPressed: () => _input('.')),
+                _key('=', onPressed: _calculate),
+              ],
             ),
-          ]),
-          _buildRow([
-            _key('1', onPressed: () => _input('1')),
-            _key('2', onPressed: () => _input('2')),
-            _key('3', onPressed: () => _input('3')),
-            _key(
-              '+',
-              onPressed: () => _input('+'),
-              type: _KeyType.operator,
-            ),
-          ]),
-          _buildRow([
-            _key(
-              '0',
-              onPressed: () => _input('0'),
-              flex: 2,
-            ),
-            _key(
-              '.',
-              onPressed: () => _input('.'),
-            ),
-            _key(
-              '=',
-              onPressed: _controller.calculate,
-              type: _KeyType.equals,
-            ),
-          ]),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildRow(List<Widget> children) {
-    return SizedBox(
-      height: 72,
-      child: Row(
-        children: children,
       ),
     );
   }
 
   Widget _key(
     String label, {
-    required VoidCallback onPressed,
-    _KeyType type = _KeyType.number,
     int flex = 1,
+    required VoidCallback onPressed,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    Color? backgroundColor;
-
-    switch (type) {
-      case _KeyType.number:
-        backgroundColor = colorScheme.surfaceContainerHighest;
-      case _KeyType.action:
-        backgroundColor = colorScheme.secondaryContainer;
-      case _KeyType.operator:
-        backgroundColor = colorScheme.primaryContainer;
-      case _KeyType.equals:
-        backgroundColor = colorScheme.primary;
-    }
-
-    final foregroundColor = type == _KeyType.equals
-        ? colorScheme.onPrimary
-        : colorScheme.onSurface;
-
     return Expanded(
       flex: flex,
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: FilledButton(
-          onPressed: onPressed,
+          onPressed: () {
+            onPressed();
+            setState(() {});
+          },
           style: FilledButton.styleFrom(
-            backgroundColor: backgroundColor,
-            foregroundColor: foregroundColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
+            padding: EdgeInsets.zero,
           ),
           child: Text(
             label,
@@ -249,11 +206,4 @@ class _CalculatorPageState extends State<CalculatorPage> {
       ),
     );
   }
-}
-
-enum _KeyType {
-  number,
-  action,
-  operator,
-  equals,
 }
