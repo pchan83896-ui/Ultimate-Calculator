@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes.dart';
+import '../features/calculator/presentation/calculator_page.dart';
 import 'theme.dart';
 
 class UltimateCalculatorApp extends StatelessWidget {
@@ -16,9 +17,7 @@ class UltimateCalculatorApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: AppRoutes.calculator,
       routes: {
-        AppRoutes.calculator: (_) => const _PlaceholderPage(
-              title: 'Calculator',
-            ),
+        AppRoutes.calculator: (_) => const CalculatorPage(),
         AppRoutes.history: (_) => const _PlaceholderPage(
               title: 'History',
             ),
