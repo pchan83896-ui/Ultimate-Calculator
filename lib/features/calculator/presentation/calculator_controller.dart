@@ -41,6 +41,40 @@ class CalculatorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleSign() {
+    _error = null;
+
+    if (_expression.isEmpty) {
+      _expression = '-';
+      _updatePreview();
+      notifyListeners();
+      return;
+    }
+
+    final operators = RegExp(r'[+*/^\-]');
+    var start = _expression.length - 1;
+
+    while (start >= 0 && !operators.hasMatch(_expression[start])) {
+      start--;
+    }
+
+    final numberStart = start + 1;
+
+    if (numberStart < _expression.length &&
+        _expression[numberStart] == '-') {
+      _expression =
+          '${_expression.substring(0, numberStart)}'
+          '${_expression.substring(numberStart + 1)}';
+    } else {
+      _expression =
+          '${_expression.substring(0, numberStart)}'
+          '-${_expression.substring(numberStart)}';
+    }
+
+    _updatePreview();
+    notifyListeners();
+  }
+
   void clear() {
     _expression = '';
     _display = '0';

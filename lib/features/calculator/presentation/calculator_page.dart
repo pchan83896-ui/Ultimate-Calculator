@@ -113,7 +113,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           Expanded(
             child: Row(
               children: [
-                _key('±', onPressed: () => _input('±')),
+                _key('±', onPressed: _controller.toggleSign),
                 _key('(', onPressed: () => _input('(')),
                 _key(')', onPressed: () => _input(')')),
                 _key('√', onPressed: () => _input('sqrt(')),
