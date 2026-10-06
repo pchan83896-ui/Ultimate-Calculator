@@ -783,4 +783,244 @@ void main() {
     expect(find.widgetWithText(FilledButton, 'RAD'), findsNothing);
   });
 
+
+  testWidgets('repeated operators replace the previous operator', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('+'));
+    await tester.pump();
+
+    await tester.tap(button('+'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    expect(displayValue(tester), '8');
+  });
+
+  testWidgets('repeated multiplication operators stay safe', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    expect(displayValue(tester), '15');
+  });
+
+  testWidgets('repeated decimals are ignored', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5.2');
+  });
+
+  testWidgets('decimal at the beginning starts with zero', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '0.5');
+  });
+
+  testWidgets('closing parenthesis without opening parenthesis is ignored',
+      (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    expect(displayValue(tester), '0');
+  });
+
+  testWidgets('empty parentheses are not closed immediately', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('('));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    expect(displayValue(tester), '(');
+  });
+
+  testWidgets('scientific function input still works after safety changes',
+      (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('sin'));
+    await tester.pump();
+
+    await tester.tap(button('9'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+
+  testWidgets('repeated operators replace the previous operator', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('+'));
+    await tester.pump();
+
+    await tester.tap(button('+'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    expect(displayValue(tester), '8');
+  });
+
+  testWidgets('repeated multiplication operators stay safe', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    expect(displayValue(tester), '15');
+  });
+
+  testWidgets('repeated decimals are ignored', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5.2');
+  });
+
+  testWidgets('decimal at the beginning starts with zero', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('.'));
+    await tester.pump();
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '0.5');
+  });
+
+  testWidgets('closing parenthesis without opening parenthesis is ignored',
+      (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    expect(displayValue(tester), '0');
+  });
+
+  testWidgets('empty parentheses are not closed immediately', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('('));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    expect(displayValue(tester), '(');
+  });
+
+  testWidgets('scientific function input still works after safety changes',
+      (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('sin'));
+    await tester.pump();
+
+    await tester.tap(button('9'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
 }

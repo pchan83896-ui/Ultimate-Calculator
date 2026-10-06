@@ -40,9 +40,102 @@ class CalculatorController extends ChangeNotifier {
 
   void input(String value) {
     _error = null;
-    _expression += value;
+
+    if (value.isEmpty) {
+      return;
+    }
+
+    if (_isOperator(value)) {
+      _inputOperator(value);
+    } else if (value == '.') {
+      _inputDecimal();
+    } else if (value == ')') {
+      _inputClosingParenthesis();
+    } else {
+      _expression += value;
+    }
+
     _updatePreview();
     notifyListeners();
+  }
+
+  bool _isOperator(String value) {
+    return value == '+' ||
+        value == '-' ||
+        value == '*' ||
+        value == '/' ||
+        value == '^';
+  }
+
+  void _inputOperator(String operator) {
+    if (_expression.isEmpty) {
+      if (operator == '-') {
+        _expression = '-';
+      }
+      return;
+    }
+
+    final last = _expression[_expression.length - 1];
+
+    if (_isOperator(last)) {
+      _expression =
+          '${_expression.substring(0, _expression.length - 1)}$operator';
+      return;
+    }
+
+    if (last == '(') {
+      if (operator == '-') {
+        _expression += operator;
+      }
+      return;
+    }
+
+    _expression += operator;
+  }
+
+  void _inputDecimal() {
+    var index = _expression.length - 1;
+
+    while (index >= 0 && !_isExpressionSeparator(_expression[index])) {
+      index--;
+    }
+
+    final currentNumber = _expression.substring(index + 1);
+
+    if (currentNumber.contains('.')) {
+      return;
+    }
+
+    if (currentNumber.isEmpty) {
+      _expression += '0.';
+    } else {
+      _expression += '.';
+    }
+  }
+
+  bool _isExpressionSeparator(String value) {
+    return _isOperator(value) || value == '(' || value == ')';
+  }
+
+  void _inputClosingParenthesis() {
+    if (_expression.isEmpty) {
+      return;
+    }
+
+    final openCount = '('.allMatches(_expression).length;
+    final closeCount = ')'.allMatches(_expression).length;
+
+    if (openCount <= closeCount) {
+      return;
+    }
+
+    final last = _expression[_expression.length - 1];
+
+    if (_isOperator(last) || last == '(' || last == '.') {
+      return;
+    }
+
+    _expression += ')';
   }
 
   void backspace() {
