@@ -405,4 +405,302 @@ void main() {
     );
   });
 
+
+  testWidgets('50 percent calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('%'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(0.5, 0.000001),
+    );
+  });
+
+  testWidgets('25 percent calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('%'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(0.25, 0.000001),
+    );
+  });
+
+  testWidgets('2 times 50 percent calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('%'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+
+  testWidgets('sin 90 degrees calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('sin'));
+    await tester.pump();
+
+    await tester.tap(button('9'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('cos 0 degrees calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('cos'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('tan 45 degrees calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('tan'));
+    await tester.pump();
+
+    await tester.tap(button('4'));
+    await tester.pump();
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+
+  testWidgets('log 100 calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('log'));
+    await tester.pump();
+
+    await tester.tap(button('1'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(2, 0.000001),
+    );
+  });
+
+  testWidgets('log 1000 calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('log'));
+    await tester.pump();
+
+    await tester.tap(button('1'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(3, 0.000001),
+    );
+  });
+
+  testWidgets('ln e calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('ln'));
+    await tester.pump();
+
+    await tester.tap(button('e'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('ln 1 calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('ln'));
+    await tester.pump();
+
+    await tester.tap(button('1'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(0, 0.000001),
+    );
+  });
+
+
+  testWidgets('5 factorial calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('!'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(120, 0.000001),
+    );
+  });
+
+  testWidgets('0 factorial calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('!'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('10 factorial calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('1'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button('!'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(3628800, 0.000001),
+    );
+  });
+
 }
