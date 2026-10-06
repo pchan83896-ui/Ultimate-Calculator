@@ -107,4 +107,76 @@ void main() {
     expect(display(), findsOneWidget);
     expect(displayValue(tester), '12');
   });
+
+  testWidgets('± toggles a positive number to negative', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('5'));
+    await tester.tap(button('±'));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '-5');
+  });
+
+  testWidgets('± toggles a negative number to positive', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('5'));
+    await tester.tap(button('±'));
+    await tester.tap(button('±'));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '5');
+  });
+
+  testWidgets('± toggles the last number in an expression', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('2'));
+    await tester.tap(button('+'));
+    await tester.tap(button('5'));
+    await tester.tap(button('±'));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '-3');
+  });
+
+
+  testWidgets('can calculate expressions with parentheses', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('('));
+    await tester.tap(button('2'));
+    await tester.tap(button('+'));
+    await tester.tap(button('3'));
+    await tester.tap(button(')'));
+    await tester.tap(button('×'));
+    await tester.tap(button('4'));
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '20');
+  });
+
+  testWidgets('respects parentheses over operator precedence', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('2'));
+    await tester.tap(button('×'));
+    await tester.tap(button('('));
+    await tester.tap(button('3'));
+    await tester.tap(button('+'));
+    await tester.tap(button('4'));
+    await tester.tap(button(')'));
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '14');
+  });
+
 }
