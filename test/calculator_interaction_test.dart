@@ -1221,4 +1221,42 @@ void main() {
     expect(displayValue(tester), '0');
   });
 
+  testWidgets('supports negative number after multiplication', (tester) async {
+    await tester.pumpWidget(
+      UltimateCalculatorApp(key: UniqueKey()),
+    );
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('×'));
+    await tester.pump();
+    await tester.tap(button('−'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '-6');
+  });
+
+  testWidgets('supports negative number after subtraction', (tester) async {
+    await tester.pumpWidget(
+      UltimateCalculatorApp(key: UniqueKey()),
+    );
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('−'));
+    await tester.pump();
+    await tester.tap(button('−'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+  });
+
 }

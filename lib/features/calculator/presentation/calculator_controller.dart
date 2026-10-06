@@ -99,6 +99,21 @@ class CalculatorController extends ChangeNotifier {
     final last = _expression[_expression.length - 1];
 
     if (_isOperator(last)) {
+      if (operator == '-' && last != '-') {
+        _expression += operator;
+        return;
+      }
+
+      if (last == '-') {
+        if (_expression.length >= 2 &&
+            _isOperator(_expression[_expression.length - 2])) {
+          return;
+        }
+
+        _expression += operator;
+        return;
+      }
+
       _expression =
           '${_expression.substring(0, _expression.length - 1)}$operator';
       return;
