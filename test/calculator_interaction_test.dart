@@ -1068,4 +1068,94 @@ void main() {
     expect(displayValue(tester), '20');
   });
 
+
+  testWidgets('repeated equals repeats addition', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('+'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '8');
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '11');
+  });
+
+  testWidgets('repeated equals repeats multiplication', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+    await tester.tap(button('×'));
+    await tester.pump();
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '10');
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '20');
+  });
+
+  testWidgets('repeated equals repeats subtraction', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('1'));
+    await tester.pump();
+    await tester.tap(button('0'));
+    await tester.pump();
+    await tester.tap(button('−'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '7');
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '4');
+  });
+
+  testWidgets('repeated equals repeats division', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('0'));
+    await tester.pump();
+    await tester.tap(button('÷'));
+    await tester.pump();
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '10');
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+  });
+
 }

@@ -14,6 +14,8 @@ class CalculatorController extends ChangeNotifier {
   String? _error;
   AngleMode _angleMode = AngleMode.degrees;
   bool _justCalculated = false;
+  String? _lastOperator;
+  String? _lastOperand;
 
   String get expression => _expression;
   String get display => _display;
@@ -203,15 +205,27 @@ class CalculatorController extends ChangeNotifier {
     _display = '0';
     _error = null;
     _justCalculated = false;
+    _lastOperator = null;
+    _lastOperand = null;
     notifyListeners();
   }
 
   void calculate() {
+    if (_justCalculated &&
+        _lastOperator != null &&
+        _lastOperand != null) {
+      _expression = '$_display$_lastOperator$_lastOperand';
+    }
+
     if (_expression.trim().isEmpty) {
       return;
     }
 
     try {
+      if (!_justCalculated) {
+        _rememberLastOperation();
+      }
+
       final result = _engine.evaluate(_expression);
 
       _display = _formatResult(result);
@@ -224,6 +238,31 @@ class CalculatorController extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void _rememberLastOperation() {
+    final match = RegExp(
+      r'^(.+)([+*/^])([^+*/^]+)$',
+    ).firstMatch(_expression);
+
+    if (match != null) {
+      _lastOperator = match.group(2);
+      _lastOperand = match.group(3);
+      return;
+    }
+
+    final subtractionMatch = RegExp(
+      r'^(.+)-([0-9.]+)$',
+    ).firstMatch(_expression);
+
+    if (subtractionMatch != null) {
+      _lastOperator = '-';
+      _lastOperand = subtractionMatch.group(2);
+      return;
+    }
+
+    _lastOperator = null;
+    _lastOperand = null;
   }
 
   void _updatePreview() {
