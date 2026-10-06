@@ -179,4 +179,36 @@ void main() {
     expect(displayValue(tester), '14');
   });
 
+
+  testWidgets('can calculate a square root', (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('√'));
+    await tester.tap(button('9'));
+    await tester.tap(button(')'));
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '3');
+  });
+
+  testWidgets('can calculate a square root of a parenthesized expression',
+      (tester) async {
+    await tester.pumpWidget(const UltimateCalculatorApp());
+
+    await tester.tap(button('√'));
+    await tester.tap(button('('));
+    await tester.tap(button('9'));
+    await tester.tap(button('+'));
+    await tester.tap(button('7'));
+    await tester.tap(button(')'));
+    await tester.tap(button(')'));
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(display(), findsOneWidget);
+    expect(displayValue(tester), '4');
+  });
+
 }
