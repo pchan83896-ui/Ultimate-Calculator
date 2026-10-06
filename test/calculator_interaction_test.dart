@@ -277,4 +277,62 @@ void main() {
     );
   });
 
+
+  testWidgets('e calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('e'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(2.7182818284, 0.000001),
+    );
+  });
+
+  testWidgets('2 × e calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('e'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(5.4365636568, 0.000001),
+    );
+  });
+
+  testWidgets('e squared calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('e'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(7.3890560989, 0.000001),
+    );
+  });
+
 }
