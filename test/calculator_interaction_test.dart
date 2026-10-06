@@ -1158,4 +1158,67 @@ void main() {
     expect(displayValue(tester), '5');
   });
 
+
+  testWidgets('error recovers when entering a new number', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('1'));
+    await tester.pump();
+    await tester.tap(button('÷'));
+    await tester.pump();
+    await tester.tap(button('0'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(find.textContaining('Division by zero'), findsOneWidget);
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+  });
+
+  testWidgets('scientific error recovers when entering a new number', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('√'));
+    await tester.pump();
+    await tester.tap(button('−'));
+    await tester.pump();
+    await tester.tap(button('9'));
+    await tester.pump();
+    await tester.tap(button(')'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(find.textContaining('Invalid square root'), findsOneWidget);
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+  });
+
+  testWidgets('clear resets calculator after an error', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('1'));
+    await tester.pump();
+    await tester.tap(button('÷'));
+    await tester.pump();
+    await tester.tap(button('0'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(find.textContaining('Division by zero'), findsOneWidget);
+
+    await tester.tap(button('AC'));
+    await tester.pump();
+
+    expect(displayValue(tester), '0');
+  });
+
 }

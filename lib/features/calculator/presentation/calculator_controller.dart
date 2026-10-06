@@ -42,11 +42,19 @@ class CalculatorController extends ChangeNotifier {
   }
 
   void input(String value) {
-    _error = null;
-
     if (value.isEmpty) {
       return;
     }
+
+    if (_error != null) {
+      _expression = '';
+      _display = '0';
+      _justCalculated = false;
+      _lastOperator = null;
+      _lastOperand = null;
+    }
+
+    _error = null;
 
     if (_justCalculated) {
       if (_isOperator(value)) {
