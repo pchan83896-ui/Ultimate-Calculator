@@ -335,4 +335,74 @@ void main() {
     );
   });
 
+
+  testWidgets('2 to the power of 3 calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(8, 0.000001),
+    );
+  });
+
+  testWidgets('5 to the power of 2 calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('5'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(25, 0.000001),
+    );
+  });
+
+  testWidgets('power operator is right associative', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('3'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(512, 0.000001),
+    );
+  });
+
 }
