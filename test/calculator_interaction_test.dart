@@ -11,7 +11,7 @@ Finder display() {
 }
 
 Finder button(String text) {
-  return find.widgetWithText(FilledButton, text);
+  return find.widgetWithText(FilledButton, text).first;
 }
 
 String displayValue(WidgetTester tester) {
@@ -21,7 +21,7 @@ String displayValue(WidgetTester tester) {
 
 void main() {
   testWidgets('can calculate 2 + 3 = 5', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('2'));
     await tester.tap(button('+'));
@@ -35,7 +35,7 @@ void main() {
   });
 
   testWidgets('respects operator precedence: 2 + 3 × 4 = 14', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('2'));
     await tester.tap(button('+'));
@@ -51,7 +51,7 @@ void main() {
   });
 
   testWidgets('can calculate division: 10 ÷ 2 = 5', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('1'));
     await tester.tap(button('0'));
@@ -66,7 +66,7 @@ void main() {
   });
 
   testWidgets('can calculate negative result: 7 − 9 = -2', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('7'));
     await tester.tap(button('−'));
@@ -80,7 +80,7 @@ void main() {
   });
 
   testWidgets('AC clears the calculator', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('1'));
     await tester.tap(button('2'));
@@ -95,7 +95,7 @@ void main() {
   });
 
   testWidgets('backspace removes the last digit', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('1'));
     await tester.tap(button('2'));
@@ -109,7 +109,7 @@ void main() {
   });
 
   testWidgets('± toggles a positive number to negative', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('5'));
     await tester.tap(button('±'));
@@ -120,7 +120,7 @@ void main() {
   });
 
   testWidgets('± toggles a negative number to positive', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('5'));
     await tester.tap(button('±'));
@@ -132,7 +132,7 @@ void main() {
   });
 
   testWidgets('± toggles the last number in an expression', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('2'));
     await tester.tap(button('+'));
@@ -146,7 +146,7 @@ void main() {
 
 
   testWidgets('can calculate expressions with parentheses', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('('));
     await tester.tap(button('2'));
@@ -163,7 +163,7 @@ void main() {
   });
 
   testWidgets('respects parentheses over operator precedence', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('2'));
     await tester.tap(button('×'));
@@ -181,7 +181,7 @@ void main() {
 
 
   testWidgets('can calculate a square root', (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('√'));
     await tester.tap(button('9'));
@@ -195,7 +195,7 @@ void main() {
 
   testWidgets('can calculate a square root of a parenthesized expression',
       (tester) async {
-    await tester.pumpWidget(const UltimateCalculatorApp());
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
 
     await tester.tap(button('√'));
     await tester.tap(button('('));
@@ -209,6 +209,72 @@ void main() {
 
     expect(display(), findsOneWidget);
     expect(displayValue(tester), '4');
+  });
+
+
+  testWidgets('pi calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+    await tester.pump();
+
+
+    await tester.tap(button('π'));
+    await tester.pump();
+
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(3.1415926535, 0.000001),
+    );
+  });
+
+  testWidgets('2 × pi calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+    await tester.pump();
+
+
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('×'));
+    await tester.pump();
+
+    await tester.tap(button('π'));
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(6.283185307, 0.000001),
+    );
+  });
+
+  testWidgets('pi squared calculates correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+    await tester.pump();
+
+
+
+    await tester.tap(button('π'));
+    await tester.pump();
+
+    await tester.tap(button('^'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(9.869604401, 0.000001),
+    );
   });
 
 }

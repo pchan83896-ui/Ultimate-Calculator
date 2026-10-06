@@ -123,6 +123,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
           Expanded(
             child: Row(
               children: [
+                _key('π', onPressed: () => _input('pi')),
+                _key('e', onPressed: () => _input('e')),
+                _key('^', onPressed: () => _input('^')),
+                _key('!', onPressed: () => _input('!')),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
                 _key('AC', onPressed: _controller.clear),
                 _key('⌫', onPressed: _controller.backspace),
                 _key('%', onPressed: () => _input('%')),
