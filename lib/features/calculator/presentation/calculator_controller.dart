@@ -7,17 +7,36 @@ class CalculatorController extends ChangeNotifier {
     CalculatorEngine? engine,
   }) : _engine = engine ?? const CalculatorEngine();
 
-  final CalculatorEngine _engine;
+  CalculatorEngine _engine;
 
   String _expression = '';
   String _display = '0';
   String? _error;
+  AngleMode _angleMode = AngleMode.degrees;
 
   String get expression => _expression;
   String get display => _display;
   String? get error => _error;
 
   bool get hasError => _error != null;
+
+  AngleMode get angleMode => _angleMode;
+
+  String get angleModeLabel {
+    return _angleMode == AngleMode.degrees ? 'DEG' : 'RAD';
+  }
+
+  void toggleAngleMode() {
+    _angleMode = _angleMode == AngleMode.degrees
+        ? AngleMode.radians
+        : AngleMode.degrees;
+
+    _engine = CalculatorEngine(angleMode: _angleMode);
+
+    _error = null;
+    _updatePreview();
+    notifyListeners();
+  }
 
   void input(String value) {
     _error = null;

@@ -703,4 +703,84 @@ void main() {
     );
   });
 
+
+  testWidgets('DEG mode calculates sin(90) as 1', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    expect(find.widgetWithText(FilledButton, 'DEG'), findsOneWidget);
+
+    await tester.tap(button('sin'));
+    await tester.pump();
+
+    await tester.tap(button('9'));
+    await tester.pump();
+
+    await tester.tap(button('0'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('RAD mode calculates sin(pi/2) as 1', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    expect(find.widgetWithText(FilledButton, 'DEG'), findsOneWidget);
+
+    await tester.tap(button('DEG'));
+    await tester.pump();
+
+    expect(find.widgetWithText(FilledButton, 'RAD'), findsOneWidget);
+
+    await tester.tap(button('sin'));
+    await tester.pump();
+
+    await tester.tap(button('π'));
+    await tester.pump();
+
+    await tester.tap(button('÷'));
+    await tester.pump();
+
+    await tester.tap(button('2'));
+    await tester.pump();
+
+    await tester.tap(button(')'));
+    await tester.pump();
+
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(
+      double.parse(displayValue(tester)),
+      closeTo(1, 0.000001),
+    );
+  });
+
+  testWidgets('DEG and RAD toggle correctly', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    expect(find.widgetWithText(FilledButton, 'DEG'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'RAD'), findsNothing);
+
+    await tester.tap(button('DEG'));
+    await tester.pump();
+
+    expect(find.widgetWithText(FilledButton, 'RAD'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'DEG'), findsNothing);
+
+    await tester.tap(button('RAD'));
+    await tester.pump();
+
+    expect(find.widgetWithText(FilledButton, 'DEG'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'RAD'), findsNothing);
+  });
+
 }

@@ -133,6 +133,29 @@ class _CalculatorPageState extends State<CalculatorPage> {
           Expanded(
             child: Row(
               children: [
+                _key('sin', onPressed: () => _input('sin(')),
+                _key('cos', onPressed: () => _input('cos(')),
+                _key('tan', onPressed: () => _input('tan(')),
+                _key(
+                  _controller.angleModeLabel,
+                  onPressed: _controller.toggleAngleMode,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _key('log', onPressed: () => _input('log(')),
+                _key('ln', onPressed: () => _input('ln(')),
+                _key('—', onPressed: () {}),
+                _key('—', onPressed: () {}),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
                 _key('AC', onPressed: _controller.clear),
                 _key('⌫', onPressed: _controller.backspace),
                 _key('%', onPressed: () => _input('%')),
