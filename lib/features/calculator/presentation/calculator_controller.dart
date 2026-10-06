@@ -13,6 +13,7 @@ class CalculatorController extends ChangeNotifier {
   String _display = '0';
   String? _error;
   AngleMode _angleMode = AngleMode.degrees;
+  bool _justCalculated = false;
 
   String get expression => _expression;
   String get display => _display;
@@ -43,6 +44,16 @@ class CalculatorController extends ChangeNotifier {
 
     if (value.isEmpty) {
       return;
+    }
+
+    if (_justCalculated) {
+      if (_isOperator(value)) {
+        _expression = _display;
+      } else {
+        _expression = '';
+      }
+
+      _justCalculated = false;
     }
 
     if (_isOperator(value)) {
@@ -191,6 +202,7 @@ class CalculatorController extends ChangeNotifier {
     _expression = '';
     _display = '0';
     _error = null;
+    _justCalculated = false;
     notifyListeners();
   }
 
@@ -204,6 +216,7 @@ class CalculatorController extends ChangeNotifier {
 
       _display = _formatResult(result);
       _error = null;
+      _justCalculated = true;
     } on FormatException catch (exception) {
       _error = exception.message;
     } catch (_) {

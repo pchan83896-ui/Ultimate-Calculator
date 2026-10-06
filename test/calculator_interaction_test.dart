@@ -1023,4 +1023,49 @@ void main() {
     );
   });
 
+
+  testWidgets('number after equals starts a new calculation', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('+'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+
+    await tester.tap(button('7'));
+    await tester.pump();
+
+    expect(displayValue(tester), '7');
+  });
+
+  testWidgets('operator after equals continues from the result', (tester) async {
+    await tester.pumpWidget(UltimateCalculatorApp(key: UniqueKey()));
+
+    await tester.tap(button('2'));
+    await tester.pump();
+    await tester.tap(button('+'));
+    await tester.pump();
+    await tester.tap(button('3'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '5');
+
+    await tester.tap(button('×'));
+    await tester.pump();
+    await tester.tap(button('4'));
+    await tester.pump();
+    await tester.tap(button('='));
+    await tester.pump();
+
+    expect(displayValue(tester), '20');
+  });
+
 }
